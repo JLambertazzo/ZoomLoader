@@ -183,7 +183,7 @@ $(document).ready(() =>{
         }
       }
       socket.emit("saveEvent", { user: currUser, urls: urls, times: times, dates: dates }, answer =>{
-        saveDataSuccess(answer.successful);
+        saveDataSuccess(answer.successful === "success");
       });
     });
   });
