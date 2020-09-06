@@ -41,6 +41,7 @@ io.on("connection", socket =>{
 
   socket.on("requestDataEvent", (data, callback)=>{
     getUserData(data.user).then(result =>{
+      console.log("got data");
       callback({ data: result });
     });
   });
@@ -142,7 +143,7 @@ async function saveData(username, urls, times, dates){
 
 async function getUserData(username){
   let data = { error: "none" };
-  const uri = "mongodb+srv://herokuhost:${process.env.mongodbKEY}@cluster0.utcj8.mongodb.net/<dbname>?retryWrites=true&w=majority"
+  const uri = `mongodb+srv://herokuhost:${process.env.mongodbKEY}@cluster0.utcj8.mongodb.net/<dbname>?retryWrites=true&w=majority`
   const client = new MongoClient(uri);
   try {
     // Connect the client to the server
