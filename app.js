@@ -35,8 +35,10 @@ io.on("connection", socket =>{
     });
   });
 
-  socket.on("saveEvent", (data) =>{
-    saveData(data.user, data.urls, data.times, data.dates);
+  socket.on("saveEvent", (data, callback) =>{
+    saveData(data.user, data.urls, data.times, data.dates).then(result =>{
+      callback({ success: result });
+    });
   });
 
   socket.on("requestDataEvent", (data, callback)=>{
@@ -106,6 +108,7 @@ async function tryLogin(username, password){
 }
 
 async function saveData(username, urls, times, dates){
+  retVal = false;
   const uri = `mongodb+srv://herokuhost:${process.env.mongodbKEY}@cluster0.utcj8.mongodb.net/<dbname>?retryWrites=true&w=majority`
   const client = new MongoClient(uri);
   try {
@@ -132,12 +135,14 @@ async function saveData(username, urls, times, dates){
       let user2 = await collection.update({
         username: username
       }, newData);
+      retVal = true;
     } else {
       console.log("user not found");
     }
   } finally {
     // Ensures that the client will close when you finish/error
     await client.close();
+    return retVal;
   }
 }
 

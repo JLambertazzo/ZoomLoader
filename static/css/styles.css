@@ -19,12 +19,37 @@ button, input {
   width: auto;
 }
 
+#signupButton, #save{
+	background: rgb(101,98,239);
+}
+
+#signupButton:hover, #save:hover{
+	background: #6165cd!important;
+}
+
+#loginButton{
+	background: #fff;
+	color: black;
+}
+
+#loginButton:hover{
+	background: #ededed;
+}
+
 #listDiv {
   top: 0px;
   position: relative;
   left: 0;
   right: 0;
   transform: translateY(0%);
+}
+
+.popover.success{
+	background: lime;
+}
+
+.popover.failed{
+	background: orange;
 }
 
 .navbar {

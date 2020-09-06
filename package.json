@@ -10,6 +10,7 @@
   "author": "Julien Bertazzo Lambert",
   "license": "ISC",
   "dependencies": {
+    "@popperjs/core": "^2.4.4",
     "ejs": "^3.1.5",
     "express": "^4.17.1",
     "mongodb": "^3.6.1",
