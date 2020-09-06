@@ -37,7 +37,7 @@ io.on("connection", socket =>{
 
   socket.on("saveEvent", (data, callback) =>{
     saveData(data.user, data.urls, data.times, data.dates).then(result =>{
-      callback({ success: result });
+      callback({ successful: result });
     });
   });
 
