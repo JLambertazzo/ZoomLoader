@@ -48,7 +48,7 @@ io.on("connection", socket =>{
 
 async function trySignUp(username, password){
   retVal = "failed";
-  const uri = "mongodb+srv://public:3UXLClRa7truhJSh@cluster0.utcj8.mongodb.net/<dbname>?retryWrites=true&w=majority"
+  const uri = `mongodb+srv://public:${process.env.mongodbKEY}@cluster0.utcj8.mongodb.net/<dbname>?retryWrites=true&w=majority`
   const client = new MongoClient(uri);
   try {
     // Connect the client to the server
@@ -82,7 +82,7 @@ async function trySignUp(username, password){
 
 async function tryLogin(username, password){
   let retVal = "failed";
-  const uri = "mongodb+srv://public:3UXLClRa7truhJSh@cluster0.utcj8.mongodb.net/<dbname>?retryWrites=true&w=majority"
+  const uri = `mongodb+srv://public:${process.env.mongodbKEY}@cluster0.utcj8.mongodb.net/<dbname>?retryWrites=true&w=majority`
   const client = new MongoClient(uri);
   try {
     // Connect the client to the server
@@ -105,7 +105,7 @@ async function tryLogin(username, password){
 }
 
 async function saveData(username, urls, times, dates){
-  const uri = "mongodb+srv://public:3UXLClRa7truhJSh@cluster0.utcj8.mongodb.net/<dbname>?retryWrites=true&w=majority"
+  const uri = `mongodb+srv://public:${process.env.mongodbKEY}@cluster0.utcj8.mongodb.net/<dbname>?retryWrites=true&w=majority`
   const client = new MongoClient(uri);
   try {
     // Connect the client to the server
@@ -142,7 +142,7 @@ async function saveData(username, urls, times, dates){
 
 async function getUserData(username){
   let data = { error: "none" };
-  const uri = "mongodb+srv://public:3UXLClRa7truhJSh@cluster0.utcj8.mongodb.net/<dbname>?retryWrites=true&w=majority"
+  const uri = "mongodb+srv://public:${process.env.mongodbKEY}@cluster0.utcj8.mongodb.net/<dbname>?retryWrites=true&w=majority"
   const client = new MongoClient(uri);
   try {
     // Connect the client to the server
