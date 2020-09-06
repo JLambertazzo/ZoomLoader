@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>ZoomLoader</title>
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="fonts/ionicons.min.css">
+    <link rel="stylesheet" href="css/Login-Form-Dark.css">
+    <link rel="stylesheet" href="css/Navigation-with-Button.css">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body class="d-lg-flex flex-column justify-content-start justify-content-lg-start" style="background: url(&quot;img/meetingpic.jpg&quot;) top / auto no-repeat;width: 100%;height: 100vh;">
+    <nav class="navbar navbar-light navbar-expand-md sticky-top d-flex d-lg-flex flex-row align-items-lg-center navigation-clean-button" style="box-shadow: 0px 1px 12px;padding: 8px;padding-right: 0px;padding-left: 0px;margin-right: 0px;">
+        <div class="container-fluid"><a class="navbar-brand" href="#" style="color: rgb(101,98,239);text-align: left;">ZoomLoader</a><button data-toggle="collapse" class="navbar-toggler" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
+            <div
+                class="collapse navbar-collapse" id="navcol-1">
+                <ul class="nav navbar-nav mr-auto">
+                    <li class="nav-item" role="presentation"></li>
+                    <li class="nav-item" role="presentation"></li>
+                </ul><span class="navbar-text actions" style="text-align: right;"> <a id="loginButton" class="login" data-toggle="modal" data-target="#loginModal">Log In</a><a id="signupButton" class="btn btn-light action-button" role="button" href="signup.html" style="color: rgb(255,255,255);background: rgb(101,98,239);" data-toggle="modal" data-target="#signUpModal">Sign Up</a></span></div>
+        </div>
+    </nav>
+    <div class="text-center" id="instruction" style="margin-bottom: 14px;">
+        <h4 style="background: rgba(255,255,255,0.88);padding: 6px;">Add your meeting links and their start time.<br>We'll let you know when it's time to join!</h4>
+    </div>
+    <div class="d-sm-flex d-lg-flex flex-column align-items-sm-center justify-content-lg-center align-items-lg-center" id="listDiv" style="height: 100%;background: rgba(255,255,255,0);">
+        <ul class="d-lg-flex flex-column justify-content-center" id="linkList" style="padding-bottom: 5px;margin-top: 10px;overflow-y: auto;background: rgba(170,170,170,0);width: 98%;margin-right: 2px;margin-left: 2px;">
+            <li id="firstEntry" class="entry" style="padding-bottom: 0px;"><input type="url"><input type="time"><input type="date"></li>
+        </ul>
+    </div>
+    <div class="text-center d-flex d-lg-flex flex-column justify-content-center align-items-center" id="notification" style="width: 50%;height: 50%;">
+        <h1 class="text-center">A meeting is coming up!</h1><button class="btn btn-primary btn-lg text-nowrap text-center" id="joinButton" type="button" style="text-align: center;border-style: none;text-shadow: 4px 3px 18px rgb(0,0,0);">Join Now!</button><button class="btn"
+            id="ignoreButton" type="button">Ignore</button></div>
+    <div class="modal fade" role="dialog" tabindex="-1" id="loginModal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Login</h4><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button></div>
+                <div class="modal-body d-lg-flex flex-column justify-content-lg-center align-items-lg-center">
+                    <form id="loginForm">
+                        <div class="form-group"><input class="form-control" type="text" placeholder="Enter username" required=""></div>
+                        <div class="form-group"><input class="form-control" type="password" placeholder="Enter password" required=""></div>
+                        <div class="form-group"><button class="btn btn-primary btn-block btn-lg" id="login" type="submit">Login</button></div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" role="dialog" tabindex="-1" id="signUpModal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Sign Up</h4><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button></div>
+                <div class="modal-body text-center d-flex flex-column align-items-lg-center" style="margin: 0px;">
+                    <form id="signupForm" oninput="pass2.setCustomValidity(pass2.value != pass1.value ? &quot;Passwords do not match.">
+                        <div class="form-group"><input class="form-control" type="text" placeholder="Enter username" required=""></div>
+                        <div class="form-group"><input class="form-control" type="password" placeholder="Enter password" required="" minlength="8" name="pass1"></div>
+                        <div class="form-group"><input class="form-control" type="password" placeholder="Confirm password" required="" minlength="8" name="pass2"></div>
+                        <div class="form-group"><button class="btn btn-primary btn-block btn-lg text-center" id="signup" type="submit">Sign Up</button></div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer class="d-lg-flex flex-row justify-content-end align-items-end align-content-end justify-content-lg-end align-items-lg-end" style="text-align: right;"><button id="save" class="btn btn-primary btn-lg" type="button" style="background: rgb(101,98,239);margin-bottom: 10px;box-shadow: 0px 0px 20px 9px rgb(4,4,4);visibility: hidden">Save</button></footer>
+    <script src="js/jquery.min.js"></script>
+    <script src="bootstrap/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
+    <script src="js/index.js"></script>
+</body>
+
+</html>
