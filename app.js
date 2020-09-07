@@ -1,6 +1,11 @@
 const express = require("express");
 const path = require("path");
 const {MongoClient} = require("mongodb");
+//for use on heroku
+const herokuuri = `mongodb+srv://herokuhost:${process.env.mongodbKEY}@cluster0.utcj8.mongodb.net/<dbname>?retryWrites=true&w=majority`;
+//for use locally
+const key = require("./key.json");
+const localuri = `mongodb+srv://JLaptop:${key.mongodbKEY}@cluster0.utcj8.mongodb.net/<dbname>?retryWrites=true&w=majority`;
 
 const routes = require("./routes");
 
@@ -51,8 +56,7 @@ io.on("connection", socket =>{
 
 async function trySignUp(username, password){
   retVal = "failed";
-  const uri = `mongodb+srv://herokuhost:${process.env.mongodbKEY}@cluster0.utcj8.mongodb.net/<dbname>?retryWrites=true&w=majority`
-  const client = new MongoClient(uri);
+  const client = new MongoClient(localuri);
   try {
     // Connect the client to the server
     await client.connect();
@@ -85,8 +89,7 @@ async function trySignUp(username, password){
 
 async function tryLogin(username, password){
   let retVal = "failed";
-  const uri = `mongodb+srv://herokuhost:${process.env.mongodbKEY}@cluster0.utcj8.mongodb.net/<dbname>?retryWrites=true&w=majority`
-  const client = new MongoClient(uri);
+  const client = new MongoClient(localuri);
   try {
     // Connect the client to the server
     await client.connect();
@@ -108,9 +111,8 @@ async function tryLogin(username, password){
 }
 
 async function saveData(username, urls, times, dates){
-  retVal = false;
-  const uri = `mongodb+srv://herokuhost:${process.env.mongodbKEY}@cluster0.utcj8.mongodb.net/<dbname>?retryWrites=true&w=majority`
-  const client = new MongoClient(uri);
+  retVal = "failed";
+  const client = new MongoClient(localuri);
   try {
     // Connect the client to the server
     await client.connect();
@@ -135,7 +137,7 @@ async function saveData(username, urls, times, dates){
       let user2 = await collection.update({
         username: username
       }, newData);
-      retVal = true;
+      retVal = "success";
     } else {
       console.log("user not found");
     }
@@ -148,8 +150,7 @@ async function saveData(username, urls, times, dates){
 
 async function getUserData(username){
   let data = { error: "none" };
-  const uri = `mongodb+srv://herokuhost:${process.env.mongodbKEY}@cluster0.utcj8.mongodb.net/<dbname>?retryWrites=true&w=majority`
-  const client = new MongoClient(uri);
+  const client = new MongoClient(localuri);
   try {
     // Connect the client to the server
     await client.connect();

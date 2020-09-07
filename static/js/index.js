@@ -86,11 +86,13 @@ $(document).ready(() =>{
         content: "Saved!",
         trigger: "focus"
       })
+      $("#save").popover("toggle");
     }else{
       $("#save").popover({
         content: "Error! Could not save",
         trigger: "focus"
       })
+      $("#save").popover("toggle");
     }
   }
 
