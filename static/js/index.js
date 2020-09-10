@@ -96,6 +96,18 @@ $(document).ready(() =>{
     }
   }
 
+  let btnBind = new Vue({
+    el: "#loginForm",
+    data() {
+      return {
+        usr: "",
+        psw: "",
+        inactiveClass: "btn btn-primary btn-block btn-lg inactive",
+        activeClass: "btn btn-primary btn-block btn-lg"
+      }
+    }
+  })
+
   //check for meeting
   setInterval(() =>{
       let currTime = new Date();

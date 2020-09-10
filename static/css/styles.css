@@ -36,6 +36,11 @@ button, input {
 	background: #ededed;
 }
 
+.inactive {
+  pointer-events: none;
+  opacity: 50%;
+}
+
 #listDiv {
   top: 0px;
   position: relative;
@@ -100,4 +105,3 @@ body {
     display: none;
   }
 }
-

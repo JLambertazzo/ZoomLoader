@@ -5,7 +5,8 @@ const {MongoClient} = require("mongodb");
 const herokuuri = `mongodb+srv://herokuhost:${process.env.mongodbKEY}@cluster0.utcj8.mongodb.net/<dbname>?retryWrites=true&w=majority`;
 //for use locally
 const key = require("./key.json");
-const localuri = `mongodb+srv://JLaptop:${key.mongodbKEY}@cluster0.utcj8.mongodb.net/<dbname>?retryWrites=true&w=majority`;
+const laptopuri = `mongodb+srv://JLaptop:${key.mongodbKEY}@cluster0.utcj8.mongodb.net/<dbname>?retryWrites=true&w=majority`;
+const computeruri = `mongodb+srv://JLambertazzo:${key.mongodbKEY}@cluster0.utcj8.mongodb.net/<dbname>?retryWrites=true&w=majority`;
 
 const routes = require("./routes");
 
@@ -56,7 +57,7 @@ io.on("connection", socket =>{
 
 async function trySignUp(username, password){
   retVal = "failed";
-  const client = new MongoClient(localuri);
+  const client = new MongoClient(computeruri);
   try {
     // Connect the client to the server
     await client.connect();
@@ -89,7 +90,7 @@ async function trySignUp(username, password){
 
 async function tryLogin(username, password){
   let retVal = "failed";
-  const client = new MongoClient(localuri);
+  const client = new MongoClient(computeruri);
   try {
     // Connect the client to the server
     await client.connect();
@@ -112,7 +113,7 @@ async function tryLogin(username, password){
 
 async function saveData(username, urls, times, dates){
   retVal = "failed";
-  const client = new MongoClient(localuri);
+  const client = new MongoClient(computeruri);
   try {
     // Connect the client to the server
     await client.connect();
@@ -150,7 +151,7 @@ async function saveData(username, urls, times, dates){
 
 async function getUserData(username){
   let data = { error: "none" };
-  const client = new MongoClient(localuri);
+  const client = new MongoClient(computeruri);
   try {
     // Connect the client to the server
     await client.connect();
