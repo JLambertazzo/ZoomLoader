@@ -57,7 +57,7 @@ io.on("connection", socket =>{
 
 async function trySignUp(username, password){
   retVal = "failed";
-  const client = new MongoClient(computeruri);
+  const client = new MongoClient(herokuuri);
   try {
     // Connect the client to the server
     await client.connect();
@@ -90,7 +90,7 @@ async function trySignUp(username, password){
 
 async function tryLogin(username, password){
   let retVal = "failed";
-  const client = new MongoClient(computeruri);
+  const client = new MongoClient(herokuuri);
   try {
     // Connect the client to the server
     await client.connect();
@@ -113,7 +113,7 @@ async function tryLogin(username, password){
 
 async function saveData(username, urls, times, dates){
   retVal = "failed";
-  const client = new MongoClient(computeruri);
+  const client = new MongoClient(herokuuri);
   try {
     // Connect the client to the server
     await client.connect();
@@ -151,7 +151,7 @@ async function saveData(username, urls, times, dates){
 
 async function getUserData(username){
   let data = { error: "none" };
-  const client = new MongoClient(computeruri);
+  const client = new MongoClient(herokuuri);
   try {
     // Connect the client to the server
     await client.connect();
