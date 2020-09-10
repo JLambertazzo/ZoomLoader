@@ -96,7 +96,7 @@ $(document).ready(() =>{
     }
   }
 
-  let btnBind = new Vue({
+  let loginBtnBind = new Vue({
     el: "#loginForm",
     data() {
       return {
@@ -106,7 +106,20 @@ $(document).ready(() =>{
         activeClass: "btn btn-primary btn-block btn-lg"
       }
     }
-  })
+  });
+
+  let signupBtnBind = new Vue({
+    el: "#signupForm",
+    data() {
+      return {
+        usr: "",
+        psw: "",
+        psw2: "",
+        inactiveClass: "btn btn-primary btn-block btn-lg inactive",
+        activeClass: "btn btn-primary btn-block btn-lg text-center"
+      }
+    }
+  });
 
   //check for meeting
   setInterval(() =>{
