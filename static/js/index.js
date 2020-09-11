@@ -2,6 +2,7 @@ $(document).ready(() =>{
   let entries = [document.getElementById("firstEntry")];
   let urlBuffer = "";
   let currUser = "";
+  let notifySound = new Audio("audio/notifySound.wav");
 
   function newLiElement(){
       let li = document.createElement("LI");
@@ -146,6 +147,7 @@ $(document).ready(() =>{
   function makeNotification(url){
       $("#notification")[0].style.visibility = "visible";
       urlBuffer = url;
+      notifySound.play();
   }
 
   //connect with backend

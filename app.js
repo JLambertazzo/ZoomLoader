@@ -4,8 +4,8 @@ const {MongoClient} = require("mongodb");
 //for use on heroku
 const herokuuri = `mongodb+srv://herokuhost:${process.env.mongodbKEY}@cluster0.utcj8.mongodb.net/<dbname>?retryWrites=true&w=majority`;
 //for use locally
-//const key = require("./key.json");
-//const localuri = `mongodb+srv://${key.user}:${key.mongodbKEY}@cluster0.utcj8.mongodb.net/<dbname>?retryWrites=true&w=majority`;
+// const key = require("./key.json");
+// const localuri = `mongodb+srv://${key.user}:${key.mongodbKEY}@cluster0.utcj8.mongodb.net/<dbname>?retryWrites=true&w=majority`;
 
 const routes = require("./routes");
 
