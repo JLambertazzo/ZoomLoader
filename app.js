@@ -25,6 +25,8 @@ var server = app.listen(app.get("port"), () =>{
 const options = {};
 const io = require("socket.io")(server, options);
 
+let currUser = "";
+
 io.on("connection", socket =>{
   socket.emit("news", {hello: "world"});
 
@@ -41,14 +43,13 @@ io.on("connection", socket =>{
   });
 
   socket.on("saveEvent", (data, callback) =>{
-    saveData(data.user, data.urls, data.times, data.dates).then(result =>{
+    saveData(data.urls, data.times, data.dates).then(result =>{
       callback({ successful: result });
     });
   });
 
   socket.on("requestDataEvent", (data, callback)=>{
-    getUserData(data.user).then(result =>{
-      console.log("got data");
+    getUserData().then(result =>{
       callback({ data: result });
     });
   });
@@ -76,7 +77,10 @@ async function trySignUp(username, password){
         }
       }
       const user = await collection.insertOne(newUser);
-      if(user) retVal = "success";
+      if(user){
+        currUser = username;
+        retVal = "success";
+      }
     }else{
       console.log("user with that name already exists");
     }
@@ -100,7 +104,7 @@ async function tryLogin(username, password){
       password: password
     }, options);
     if(user != null){
-      console.log("success");
+      currUser = username;
       retVal = "success";
     }
   } finally {
@@ -110,8 +114,9 @@ async function tryLogin(username, password){
   }
 }
 
-async function saveData(username, urls, times, dates){
+async function saveData(urls, times, dates){
   retVal = "failed";
+  if(currUser === "") return retVal;
   const client = new MongoClient(herokuuri);
   try {
     // Connect the client to the server
@@ -120,13 +125,13 @@ async function saveData(username, urls, times, dates){
     const collection = database.collection("users");
     //check if user exists
     const user = await collection.findOne({
-      username: username
+      username: currUser
     }, options);
 
     if(user != null){
       //update entries
       let newData = { //replacement data
-        username: username,
+        username: currUser,
         password: user.password,
         meetingData: {
           urls: urls,
@@ -135,7 +140,7 @@ async function saveData(username, urls, times, dates){
         }
       }
       let user2 = await collection.update({
-        username: username
+        username: currUser
       }, newData);
       retVal = "success";
     } else {
@@ -148,8 +153,9 @@ async function saveData(username, urls, times, dates){
   }
 }
 
-async function getUserData(username){
+async function getUserData(){
   let data = { error: "none" };
+  if(currUser === "") return { error: "user not logged in" };
   const client = new MongoClient(herokuuri);
   try {
     // Connect the client to the server
@@ -157,7 +163,7 @@ async function getUserData(username){
     const database = client.db("users");
     const collection = database.collection("users");
     const userCheck = await collection.findOne({
-      username: username
+      username: currUser
     }, options);
     data = {
       urls: [],

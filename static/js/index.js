@@ -1,7 +1,6 @@
 $(document).ready(() =>{
   let entries = [document.getElementById("firstEntry")];
   let urlBuffer = "";
-  let currUser = "";
   let notifySound = new Audio("audio/notifySound.wav");
 
   function newLiElement(){
@@ -161,13 +160,12 @@ $(document).ready(() =>{
         let password = loginForm.children[1].children[0].value;
         socket.emit("loginEvent", { user: username, pass: password }, (answer)=>{
           if(answer.message === "success"){
-            currUser = username;
             $("#signupButton")[0].style.visibility = "hidden";
             $("#loginButton")[0].style.visibility = "hidden";
             $("#save")[0].style.visibility = "visible";
             clearLoginModal();
             //load user data from database
-            socket.emit("requestDataEvent", { user: currUser }, (answer)=>{
+            socket.emit("requestDataEvent", {}, (answer)=>{
               loadData(answer.data);
             });
           }
@@ -184,7 +182,6 @@ $(document).ready(() =>{
         let password = signupForm.children[1].children[0].value;
         socket.emit("signUpEvent", { user: username, pass: password }, (answer)=>{
           if(answer.message === "success"){
-            currUser = username;
             $("#signupButton")[0].style.visibility = "hidden";
             $("#loginButton")[0].style.visibility = "hidden";
             $("#save")[0].style.visibility = "visible";
@@ -197,10 +194,6 @@ $(document).ready(() =>{
 
     //save button handler
     $("#save").click(() =>{
-      if(currUser === ""){
-        saveDataSuccess(false);
-        return;
-      }
       urls = [];
       times = [];
       dates = [];
@@ -211,7 +204,7 @@ $(document).ready(() =>{
           dates.push(entries[i].children[2].value);
         }
       }
-      socket.emit("saveEvent", { user: currUser, urls: urls, times: times, dates: dates }, answer =>{
+      socket.emit("saveEvent", { urls: urls, times: times, dates: dates }, answer =>{
         saveDataSuccess(answer.successful === "success");
       });
     });
