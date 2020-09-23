@@ -1,11 +1,12 @@
 const express = require("express");
 const path = require("path");
 const {MongoClient} = require("mongodb");
+const hash = require('hash.js');
 //for use on heroku
 const herokuuri = `mongodb+srv://herokuhost:${process.env.mongodbKEY}@cluster0.utcj8.mongodb.net/<dbname>?retryWrites=true&w=majority`;
 //for use locally
-// const key = require("./key.json");
-// const localuri = `mongodb+srv://${key.user}:${key.mongodbKEY}@cluster0.utcj8.mongodb.net/<dbname>?retryWrites=true&w=majority`;
+const key = require("./key.json");
+const localuri = `mongodb+srv://${key.user}:${key.mongodbKEY}@cluster0.utcj8.mongodb.net/<dbname>?retryWrites=true&w=majority`;
 
 const routes = require("./routes");
 
@@ -57,7 +58,8 @@ io.on("connection", socket =>{
 
 async function trySignUp(username, password){
   retVal = "failed";
-  const client = new MongoClient(herokuuri);
+  password = hash.sha256().update(password).digest('hex');
+  const client = new MongoClient(localuri);
   try {
     // Connect the client to the server
     await client.connect();
@@ -93,7 +95,8 @@ async function trySignUp(username, password){
 
 async function tryLogin(username, password){
   let retVal = "failed";
-  const client = new MongoClient(herokuuri);
+  password = hash.sha256().update(password).digest('hex');
+  const client = new MongoClient(localuri);
   try {
     // Connect the client to the server
     await client.connect();
@@ -117,7 +120,7 @@ async function tryLogin(username, password){
 async function saveData(urls, times, dates){
   retVal = "failed";
   if(currUser === "") return retVal;
-  const client = new MongoClient(herokuuri);
+  const client = new MongoClient(localuri);
   try {
     // Connect the client to the server
     await client.connect();
@@ -156,7 +159,7 @@ async function saveData(urls, times, dates){
 async function getUserData(){
   let data = { error: "none" };
   if(currUser === "") return { error: "user not logged in" };
-  const client = new MongoClient(herokuuri);
+  const client = new MongoClient(localuri);
   try {
     // Connect the client to the server
     await client.connect();
