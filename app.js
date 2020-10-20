@@ -1,75 +1,75 @@
-const express = require("express");
-const path = require("path");
-const {MongoClient} = require("mongodb");
-const hash = require('hash.js');
-//for use on heroku
-const herokuuri = `mongodb+srv://herokuhost:${process.env.mongodbKEY}@cluster0.utcj8.mongodb.net/<dbname>?retryWrites=true&w=majority`;
-//for use locally
-const key = require("./key.json");
-const localuri = `mongodb+srv://${key.user}:${key.mongodbKEY}@cluster0.utcj8.mongodb.net/<dbname>?retryWrites=true&w=majority`;
+const express = require('express')
+const path = require('path')
+const { MongoClient } = require('mongodb')
+const hash = require('hash.js')
+// for use on heroku
+const herokuuri = `mongodb+srv://herokuhost:${process.env.mongodbKEY}@cluster0.utcj8.mongodb.net/<dbname>?retryWrites=true&w=majority`
+// for use locally
+// const key = require('./key.json')
+// const localuri = `mongodb+srv://${key.user}:${key.mongodbKEY}@cluster0.utcj8.mongodb.net/<dbname>?retryWrites=true&w=majority`
 
-const routes = require("./routes");
+const routes = require('./routes')
 
-var app = express();
+var app = express()
 
-app.set("port", process.env.PORT || 3000);
+app.set('port', process.env.PORT || 3000)
 
-app.set("views", path.join(__dirname, "views"));
-app.set("view engine", "ejs");
+app.set('views', path.join(__dirname, 'views'))
+app.set('view engine', 'ejs')
 
-app.use(express.static(path.join(__dirname, 'static')));
-app.use(routes);
+app.use(express.static(path.join(__dirname, 'static')))
+app.use(routes)
 
-var server = app.listen(app.get("port"), () =>{
-  console.log("server started on port " + app.get("port"));
-});
-const options = {};
-const io = require("socket.io")(server, options);
+var server = app.listen(app.get('port'), () => {
+  console.log('server started on port ' + app.get('port'))
+})
+const options = {}
+const io = require('socket.io')(server, options)
 
-let currUser = "";
+let currUser = ''
 
-io.on("connection", socket =>{
-  socket.emit("news", {hello: "world"});
+io.on('connection', socket => {
+  socket.emit('news', { hello: 'world' })
 
-  socket.on("loginEvent", (data, callback) =>{
-    tryLogin(data.user, data.pass).catch(console.dir).then(result =>{
-      callback({ message: result });
-    });
-  });
+  socket.on('loginEvent', (data, callback) => {
+    tryLogin(data.user, data.pass).catch(console.dir).then(result => {
+      callback({ message: result })
+    })
+  })
 
-  socket.on("signUpEvent", (data, callback) =>{
-    trySignUp(data.user, data.pass).catch(console.dir).then(result =>{
-      callback({ message: result });
-    });
-  });
+  socket.on('signUpEvent', (data, callback) => {
+    trySignUp(data.user, data.pass).catch(console.dir).then(result => {
+      callback({ message: result })
+    })
+  })
 
-  socket.on("saveEvent", (data, callback) =>{
-    saveData(data.urls, data.times, data.dates).then(result =>{
-      callback({ successful: result });
-    });
-  });
+  socket.on('saveEvent', (data, callback) => {
+    saveData(data.urls, data.times, data.dates).then(result => {
+      callback({ successful: result })
+    })
+  })
 
-  socket.on("requestDataEvent", (data, callback)=>{
-    getUserData().then(result =>{
-      callback({ data: result });
-    });
-  });
-});
+  socket.on('requestDataEvent', (data, callback) => {
+    getUserData().then(result => {
+      callback({ data: result })
+    })
+  })
+})
 
-async function trySignUp(username, password){
-  retVal = "failed";
-  password = hash.sha256().update(password).digest('hex');
-  const client = new MongoClient(localuri);
+async function trySignUp (username, password) {
+  let retVal = 'failed'
+  password = hash.sha256().update(password).digest('hex')
+  const client = new MongoClient(herokuuri)
   try {
     // Connect the client to the server
-    await client.connect();
-    const database = client.db("users");
-    const collection = database.collection("users");
+    await client.connect()
+    const database = client.db('users')
+    const collection = database.collection('users')
     const userCheck = await collection.findOne({
       username: username,
-    }, options);
-    if(userCheck == null){
-      let newUser = {
+    }, options)
+    if (userCheck == null) {
+      const newUser = {
         username: username,
         password: password,
         meetingData: {
@@ -78,62 +78,62 @@ async function trySignUp(username, password){
           dates: []
         }
       }
-      const user = await collection.insertOne(newUser);
-      if(user){
-        currUser = username;
-        retVal = "success";
+      const user = await collection.insertOne(newUser)
+      if (user) {
+        let currUser = username
+        retVal = 'success'
       }
-    }else{
-      console.log("user with that name already exists");
+    } else {
+      console.log('user with that name already exists')
     }
   } finally {
     // Ensures that the client will close when you finish/error
-    await client.close();
-    return retVal;
+    await client.close()
+    return retVal
   }
 }
 
-async function tryLogin(username, password){
-  let retVal = "failed";
-  password = hash.sha256().update(password).digest('hex');
-  const client = new MongoClient(localuri);
+async function tryLogin (username, password) {
+  let retVal = 'failed'
+  password = hash.sha256().update(password).digest('hex')
+  const client = new MongoClient(herokuuri)
   try {
     // Connect the client to the server
-    await client.connect();
-    const database = client.db("users");
-    const collection = database.collection("users");
+    await client.connect()
+    const database = client.db('users')
+    const collection = database.collection('users')
     const user = await collection.findOne({
       username: username,
       password: password
-    }, options);
-    if(user != null){
-      currUser = username;
-      retVal = "success";
+    }, options)
+    if (user != null) {
+      currUser = username
+      retVal = 'success'
     }
   } finally {
     // Ensures that the client will close when you finish/error
-    await client.close();
-    return retVal;
+    await client.close()
+    return retVal
   }
 }
 
-async function saveData(urls, times, dates){
-  retVal = "failed";
-  if(currUser === "") return retVal;
-  const client = new MongoClient(localuri);
+async function saveData (urls, times, dates) {
+  let retVal = 'failed'
+  if (currUser === '') return retVal
+  const client = new MongoClient(herokuuri)
   try {
     // Connect the client to the server
-    await client.connect();
-    const database = client.db("users");
-    const collection = database.collection("users");
-    //check if user exists
+    await client.connect()
+    const database = client.db('users')
+    const collection = database.collection('users')
+    // check if user exists
     const user = await collection.findOne({
       username: currUser
-    }, options);
+    }, options)
 
-    if(user != null){
-      //update entries
-      let newData = { //replacement data
+    if (user != null) {
+      // update entries
+      const newData = { // replacement data
         username: currUser,
         password: user.password,
         meetingData: {
@@ -142,45 +142,45 @@ async function saveData(urls, times, dates){
           dates: dates
         }
       }
-      let user2 = await collection.update({
+      await collection.updateOne({
         username: currUser
-      }, newData);
-      retVal = "success";
+      }, newData)
+      retVal = 'success'
     } else {
-      console.log("user not found");
+      console.log('user not found')
     }
   } finally {
     // Ensures that the client will close when you finish/error
-    await client.close();
-    return retVal;
+    await client.close()
+    return retVal
   }
 }
 
-async function getUserData(){
-  let data = { error: "none" };
-  if(currUser === "") return { error: "user not logged in" };
-  const client = new MongoClient(localuri);
+async function getUserData () {
+  let data = { error: 'none' }
+  if (currUser === '') return { error: 'user not logged in' }
+  const client = new MongoClient(herokuuri)
   try {
     // Connect the client to the server
-    await client.connect();
-    const database = client.db("users");
-    const collection = database.collection("users");
+    await client.connect()
+    const database = client.db('users')
+    const collection = database.collection('users')
     const userCheck = await collection.findOne({
       username: currUser
-    }, options);
+    }, options)
     data = {
       urls: [],
       times: [],
       dates: []
     }
 
-    if(userCheck != null){
-      data.urls = userCheck.meetingData.urls;
-      data.times = userCheck.meetingData.times;
-      data.dates = userCheck.meetingData.dates;
+    if (userCheck != null) {
+      data.urls = userCheck.meetingData.urls
+      data.times = userCheck.meetingData.times
+      data.dates = userCheck.meetingData.dates
     }
-  }finally{
-    await client.close();
+  } finally {
+    await client.close()
     return data
   }
 }
