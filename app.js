@@ -119,6 +119,7 @@ async function tryLogin (username, password) {
 
 async function saveData (urls, times, dates) {
   let retVal = 'failed'
+  console.log(currUser)
   if (currUser === '') return retVal
   const client = new MongoClient(herokuuri)
   try {
@@ -144,11 +145,13 @@ async function saveData (urls, times, dates) {
       }
       await collection.updateOne({
         username: currUser
-      }, newData)
+      }, { $set: newData })
       retVal = 'success'
     } else {
       console.log('user not found')
     }
+  } catch(error) {
+    console.log(error)
   } finally {
     // Ensures that the client will close when you finish/error
     await client.close()
