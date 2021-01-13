@@ -8,7 +8,7 @@ To set up this project and run it for yourself follow the steps below:
 1. Clone this repo to a folder on your device.
 2. Create a file in the repository named 'localdb'
 3. Run the program using the following commands:
-   1. `npm run-script setup`
+   1. `npm i`
    2. `mongod --dbpath localdb` (in a separate terminal)
    3. `npm start`
 4. The site should now be available locally on localhost:5000
