@@ -23,9 +23,6 @@ Once installed and started visit localhost:5000
 ## Technologies Used
 
 * Node.js - backend/running server
-* Expressjs - MealPlanner api
-* Mongoose - Schemas for MongoDB
-* MongoDB - Database for users, meals, ingredients
-* React
-* Material-UI
+* Socket.io - frontend/backend connection
+* MongoDB - Database for users and their meetings
 * HTML/CSS/JavaScript
