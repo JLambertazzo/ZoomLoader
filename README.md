@@ -1,14 +1,31 @@
+# ZoomLoader
+ZoomLoader is a web app made to help you manage your zoom meetings.
 ### Hosted [here](https://zoomloader.herokuapp.com/)
 
-ZoomLoader, a submission for the First Day Back Hacks 2020.
+## Set Up
 
-This project is a full stack web application and its purpose is to save zoom meeting links and their start times, as well as open the meetings when the time comes. This allows users to save all of their meetings in one place. 
+To set up this project and run it for yourself follow the steps below:
+1. Clone this repo to a folder on your device.
+2. Create a file in the repository named 'localdb'
+3. Run the program using the following commands:
+   1. `npm run-script setup`
+   2. `mongod --dbpath localdb` (in a separate terminal)
+   3. `npm start`
+4. The site should now be available locally on localhost:5000
 
-This project's frontend was created in bootstrap, the backend was created in node.js with a connection to a mongodb database. The frontend and backend were connected using socket.io.
+## Usage
 
-To run this web app on your own machine:
-1. download this repo to your device
-2. open a command prompt to the repo folder
-3. type "node app.js" and hit enter
-after doing this you should be able to connect from your browser by going to "localhost:3000" in the address bar
-####NOTE: connecting to the database uses a hidden environment variable as a key for security. If running on your own machine you will need to create/connect to your own mongodb atlas database and edit the code in app.js accordingly.
+Once installed and started visit localhost:5000
+* Sign up or log in using the buttons on the top right
+* Add zoom links and the time/dates of the meetings to 
+* If logged in, save your meetings and their times by pressing the save button
+
+## Technologies Used
+
+* Node.js - backend/running server
+* Expressjs - MealPlanner api
+* Mongoose - Schemas for MongoDB
+* MongoDB - Database for users, meals, ingredients
+* React
+* Material-UI
+* HTML/CSS/JavaScript
