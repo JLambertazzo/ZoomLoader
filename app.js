@@ -2,17 +2,13 @@ const express = require('express')
 const path = require('path')
 const { MongoClient } = require('mongodb')
 const hash = require('hash.js')
-// for use on heroku
-const herokuuri = `mongodb+srv://herokuhost:${process.env.mongodbKEY}@cluster0.utcj8.mongodb.net/<dbname>?retryWrites=true&w=majority`
-// for use locally
-// const key = require('./key.json')
-// const localuri = `mongodb+srv://${key.user}:${key.mongodbKEY}@cluster0.utcj8.mongodb.net/<dbname>?retryWrites=true&w=majority`
+const mongouri = process.env.MONGO_URI || 'mongodb://localhost:27017/ZoomLoader'
 
 const routes = require('./routes')
 
 var app = express()
 
-app.set('port', process.env.PORT || 3000)
+app.set('port', process.env.PORT || 5000)
 
 app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'ejs')
@@ -59,14 +55,14 @@ io.on('connection', socket => {
 async function trySignUp (username, password) {
   let retVal = 'failed'
   password = hash.sha256().update(password).digest('hex')
-  const client = new MongoClient(herokuuri)
+  const client = new MongoClient(mongouri)
   try {
     // Connect the client to the server
     await client.connect()
     const database = client.db('users')
     const collection = database.collection('users')
     const userCheck = await collection.findOne({
-      username: username,
+      username: username
     }, options)
     if (userCheck == null) {
       const newUser = {
@@ -80,7 +76,6 @@ async function trySignUp (username, password) {
       }
       const user = await collection.insertOne(newUser)
       if (user) {
-        let currUser = username
         retVal = 'success'
       }
     } else {
@@ -96,7 +91,7 @@ async function trySignUp (username, password) {
 async function tryLogin (username, password) {
   let retVal = 'failed'
   password = hash.sha256().update(password).digest('hex')
-  const client = new MongoClient(herokuuri)
+  const client = new MongoClient(mongouri)
   try {
     // Connect the client to the server
     await client.connect()
@@ -121,7 +116,7 @@ async function saveData (urls, times, dates) {
   let retVal = 'failed'
   console.log(currUser)
   if (currUser === '') return retVal
-  const client = new MongoClient(herokuuri)
+  const client = new MongoClient(mongouri)
   try {
     // Connect the client to the server
     await client.connect()
@@ -150,7 +145,7 @@ async function saveData (urls, times, dates) {
     } else {
       console.log('user not found')
     }
-  } catch(error) {
+  } catch (error) {
     console.log(error)
   } finally {
     // Ensures that the client will close when you finish/error
@@ -162,7 +157,7 @@ async function saveData (urls, times, dates) {
 async function getUserData () {
   let data = { error: 'none' }
   if (currUser === '') return { error: 'user not logged in' }
-  const client = new MongoClient(herokuuri)
+  const client = new MongoClient(mongouri)
   try {
     // Connect the client to the server
     await client.connect()
